@@ -1,0 +1,60 @@
+<%- include("partials/header.ejs")  %>
+
+<section class="box" id="heading">
+  <h1 class="text-4xl">
+     <%= listTitle %> 
+    </h1>
+  <!-- put date here -->
+</section>
+
+<section class="box" >
+  <form action="/add" method="post">
+    <input type="text" name="newItem" placeholder="New Item" autofocus="true" autocomplete="false">
+    <button class="add" type="submit">+</button>
+  </form>
+  <% listItems.forEach((items) =>{ %>
+  <div class="content flex flex-col justify-start">
+   <!-- list -->
+  <div class="list item"> 
+  <!-- check/delete -->
+    <form action="/delete" method="post">
+      <input id="del<%= items.id %>" type="checkbox" onchange="deleteTitle('<%= items.id%>')" name="deleteId" value="<%= items.id%>">
+    </form>
+    <ul>
+        <li id="title<%=  items.id%>">
+        <p id="text<%= items.id%>"> <%= items.title %></p>
+        </li> 
+    </ul>
+    <!-- edit -->
+    <form class="edit" action="/edit" method="post">
+      <input type="hidden" name="updatedItemId" value="<%= items.id %>">
+      <input type="text" name="updateTitle" id="input<%= items.id%>" autofocus="true" hidden="true" value="<%= items.title%>"/>
+      <button type="submit" class="edit" id="done<%=items.id%>" hidden>
+        <img class="icon" src="/assets/icons/check-solid.svg" alt="tick image">
+      </button>
+    </form>
+
+    <button id="edit<%= items.id %>" class="edit" onclick="handler('<%= items.id%>')"> 
+      <img class="icon" src="/assets/icons/pencil-solid.svg" alt="pencil image" >
+    </button>
+ </div>
+  <%  }) %>
+</div>
+</section>
+
+<script>
+  function handler(id) {  
+  document.getElementById('title' + id).setAttribute('hidden', 'true')
+  document.getElementById('edit' + id).setAttribute('hidden', 'true')
+  document.getElementById("done" + id).removeAttribute("hidden")
+  document.getElementById("input" + id).removeAttribute("hidden")
+  }
+  function deleteTitle(id) {
+    document.getElementById("text"+ id).style.textDecoration = "line-through"
+    // document.getElementById("text").className = "fadeOut"
+    // document.getElementByClassName("edit").className = "fadeOut"
+      document.getElementById("del" + id).form.submit()
+  }
+</script>
+
+<%- include("partials/footer.ejs")  %>
